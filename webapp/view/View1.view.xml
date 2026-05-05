@@ -1,0 +1,265 @@
+<mvc:View
+    controllerName="wfmonitorlogs.controller.View1"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:f="sap.f"
+    xmlns:t="sap.ui.table"
+    xmlns:fb="sap.ui.comp.filterbar"
+    xmlns:core="sap.ui.core"
+    xmlns:sap.ui.fl="sap.ui.fl"
+    displayBlock="true"
+>
+    <Page
+        id="page"
+        title="{i18n>title}"
+    >
+        <Panel
+            id="iwfw"
+            width="auto"
+            class="sapUiSmallMargin"
+        >
+            <!-- showGoOnFB="true"
+  showFilterConfiguration="false"
+  advancedMode="true"
+  filterBarExpanded="false" -->
+            <content>
+                <fb:FilterBar
+                    id="WFfilterbar"
+                    useToolbar="false"
+                    search=".onSearchTable"
+                    filterChange=".onFilterChange"
+                >
+                    <fb:filterGroupItems>
+                        <fb:FilterGroupItem
+                            name="createdAt"
+                            label="Created At"
+                            groupName="_Basic"
+                            visibleInFilterBar="true"
+                        >
+                            <fb:control>
+                                <!-- <DateRangeSelection
+                                    id="idCreate"
+                                    class="SD"
+                                    value="{ 'type': 'sap.ui.model.type.DateInterval', 'formatOptions': { 'pattern': 'yyyy-MM-dd' }, 'parts': [ { 'type': 'sap.ui.model.type.Date', 'path': '/start' }, { 'type': 'sap.ui.model.type.Date', 'path': '/end' } ] }"
+                                    change="handleChange"
+                                /> -->
+                                	<DateTimePicker
+			id="idCreate"
+			placeholder="Enter Date"
+			change="handleChange"/>
+                            </fb:control>
+                        </fb:FilterGroupItem>
+                        <fb:FilterGroupItem
+                            name="id"
+                            label="ID"
+                            groupName="_Basic"
+                            visibleInFilterBar="true"
+                        >
+                            <fb:control>
+                                <Input value="" />
+                            </fb:control>
+                        </fb:FilterGroupItem>
+                        <fb:FilterGroupItem
+                            name="createdBy"
+                            label="Created By"
+                            groupName="_Basic"
+                            visibleInFilterBar="true"
+                        >
+                            <fb:control>
+                                <Input
+                                    id="eDdate"
+                                    value=""
+                                    change="handleChange"
+                                />
+                            </fb:control>
+                        </fb:FilterGroupItem>
+                        <!-- <fb:FilterGroupItem
+                            name="processor"
+                            label="Processor"
+                            groupName="_Basic"
+                            visibleInFilterBar="true"
+                        >
+                            <fb:control>
+                                <Input
+                                    id="proce"
+                                    value=""
+                                    change="handleChange"
+                                />
+                            </fb:control>
+                        </fb:FilterGroupItem> -->
+                        <fb:FilterGroupItem
+                            name="status"
+                            label="Status"
+                            groupName="_Basic"
+                            visibleInFilterBar="true"
+                        >
+                            <fb:control>
+                                <MultiComboBox
+                                    id="idmultiStatus"
+                                    items="{path:'statusModel>/'}"
+                                    editable="true"
+                                    enabled="true"
+                                    visible="true"
+                                    width="auto"
+                                    valueState="None"
+                                >
+                                    <items>
+                                        <core:Item
+                                            text="{statusModel>status}"
+                                            enabled="true"
+                                            key="{statusModel>status}"
+                                        />
+                                    </items>
+                                </MultiComboBox>
+                            </fb:control>
+                        </fb:FilterGroupItem>
+                        <fb:FilterGroupItem
+                            name="workflowInstanceId"
+                            label="Workflow Instance"
+                            groupName="_Basic"
+                            visibleInFilterBar="true"
+                        >
+                            <fb:control>
+                                <Input
+                                    id="wfid"
+                                    value=""
+                                    change="handleChange"
+                                />
+                            </fb:control>
+                        </fb:FilterGroupItem>
+                    </fb:filterGroupItems>
+                </fb:FilterBar>
+                <t:Table
+                    id="idwfTable"
+                    rowMode="Interactive"
+                    selectionMode="None"
+                    selectionBehavior="RowOnly"
+                    ariaLabelledBy="title"
+                    fixedColumnCount="3"
+                    width="100%"
+                    rows="{tableModel>/}"
+                    alternateRowColors="true"
+                    sap.ui.fl:flexibility="sap/m/flexibility/EngineFlex"
+                >
+                    <!--  <t:Table id="idTPDTable" rowMode="Interactive" 
+					rows="{path:'/TpdHeaders',sorter: {path: 'createdAt',descending: true}, parameters: {$$updateGroupId: 'upTpId',$count : true,$expand:{'AffectedPrograms':{'$select':['ProgramName']}}}}" selectionMode="None" selectionBehavior="RowOnly" ariaLabelledBy="title" fixedColumnCount="3" width="100%" alternateRowColors="true" sap.ui.fl:flexibility="sap/m/flexibility/EngineFlex">  -->
+                    <t:rowMode>
+                        <rowmodes:Interactive
+                            xmlns:rowmodes="sap.ui.table.rowmodes"
+                            rowCount="10"
+                            minRowCount="10"
+                        />
+                    </t:rowMode>
+                    <!-- <t:extension>
+                        <OverflowToolbar>
+                            <content>
+                                <ToolbarSpacer />
+                                <Button text="Create New TPD" icon="sap-icon://add" press="onCreateTPD"/>
+<Button icon="sap-icon://excel-attachment" press="onExport"/>
+<Button icon="sap-icon://action-settings" press="openPersoDialog"/>
+                            </content>
+                        </OverflowToolbar>
+                    </t:extension> -->
+                    <t:columns>
+                        <t:Column
+                            id="id"
+                            filterProperty="id"
+                            sortProperty="id"
+                            visible="true"
+                        >
+                            <Label text="ID" />
+                            <t:template>
+                                <Link text="{tableModel>id}" press="onLinkPress"/>
+                            </t:template>
+                        </t:Column>
+                        <t:Column
+                            id="cat"
+                        >
+                            <Label text="Created At" />
+                            <t:template>
+                                <Text text="{path:'tableModel>createdAt',formatter:'.formatter.convertsDate'}"/>
+                            </t:template>
+                        </t:Column>
+                        <t:Column
+                            id="proc"
+                            filterProperty="processor"
+                            sortProperty="processor"
+                        >
+                            <Label text="Processor" />
+                            <t:template>
+                                <Text text="{tableModel>processor}" />
+                            </t:template>
+                        </t:Column>
+                        <t:Column
+                            id="stat"
+                            autoResizable="true"
+                            filterProperty="status"
+                            sortProperty="status"
+                        >
+                            <Label text="Status" />
+                            <t:template>
+                                <Text
+                                    text="{tableModel>status}"
+                                    wrapping="false"
+                                    tooltip="{tableModel>status}"
+                                />
+                            </t:template>
+                        </t:Column>
+                        <t:Column
+                            id="lwgroup"
+                            filterProperty="workflowInstanceId"
+                            sortProperty="workflowInstanceId"
+                        >
+                            <Label text="Workflow Instance" />
+                            <t:template>
+                                <Text
+                                    text="{tableModel>workflowInstanceId}"
+                                    wrapping="false"
+                                    tooltip="{tableModel>workflowInstanceId})"
+                                />
+                            </t:template>
+                        </t:Column>
+                        <t:Column
+                            id="cby"
+                        >
+                            <Label text="Created By" />
+                            <t:template>
+                                <Text
+                                    text="{tableModel>createdBy}"
+                                    wrapping="false"
+                                    tooltip="{tableModel>createdBy}"
+                                />
+                            </t:template>
+                        </t:Column>
+                        <t:Column
+                            id="wfdid"
+                            filterProperty="definitionId"
+                            sortProperty="definitionId"
+                        >
+                            <Label text="Definition Id" />
+                            <t:template>
+                                <Text
+                                    text="{tableModel>definitionId}"
+                                    wrapping="false"
+                                    tooltip="{tableModel>definitionId}"
+                                />
+                            </t:template>
+                        </t:Column>
+                        <t:Column
+                            id="ilcat"
+                        >
+                            <Label text="Last Changed At" />
+                            <t:template>
+                                <Text
+                                    text="{path:'tableModel>lastChangedAt',formatter:'.formatter.convertsDate'}"
+                                    wrapping="false"
+                                    tooltip="{tableModel>lastChangedAt}"
+                                />
+                            </t:template>
+                        </t:Column>
+                    </t:columns>
+                </t:Table>
+            </content>
+        </Panel>
+    </Page>
+</mvc:View>
