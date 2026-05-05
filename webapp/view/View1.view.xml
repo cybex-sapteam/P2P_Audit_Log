@@ -31,8 +31,8 @@
                 >
                     <fb:filterGroupItems>
                         <fb:FilterGroupItem
-                            name="createdAt"
-                            label="Created At"
+                            name="createdFrom"
+                            label="Created After"
                             groupName="_Basic"
                             visibleInFilterBar="true"
                         >
@@ -44,7 +44,26 @@
                                     change="handleChange"
                                 /> -->
                                 	<DateTimePicker
-			id="idCreate"
+			id="idCreateup"
+			placeholder="Enter Date"
+			change="handleChange"/>
+                            </fb:control>
+                        </fb:FilterGroupItem>
+                          <fb:FilterGroupItem
+                            name="createdUpTo"
+                            label="Created Before"
+                            groupName="_Basic"
+                            visibleInFilterBar="true"
+                        >
+                            <fb:control>
+                                <!-- <DateRangeSelection
+                                    id="idCreate"
+                                    class="SD"
+                                    value="{ 'type': 'sap.ui.model.type.DateInterval', 'formatOptions': { 'pattern': 'yyyy-MM-dd' }, 'parts': [ { 'type': 'sap.ui.model.type.Date', 'path': '/start' }, { 'type': 'sap.ui.model.type.Date', 'path': '/end' } ] }"
+                                    change="handleChange"
+                                /> -->
+                                	<DateTimePicker
+			id="idCreateupto"
 			placeholder="Enter Date"
 			change="handleChange"/>
                             </fb:control>
@@ -52,6 +71,16 @@
                         <fb:FilterGroupItem
                             name="id"
                             label="ID"
+                            groupName="_Basic"
+                            visibleInFilterBar="true"
+                        >
+                            <fb:control>
+                                <Input value="" />
+                            </fb:control>
+                        </fb:FilterGroupItem>
+                              <fb:FilterGroupItem
+                            name="processor"
+                            label="Processor"
                             groupName="_Basic"
                             visibleInFilterBar="true"
                         >
@@ -146,8 +175,8 @@
                     <t:rowMode>
                         <rowmodes:Interactive
                             xmlns:rowmodes="sap.ui.table.rowmodes"
-                            rowCount="10"
-                            minRowCount="10"
+                            rowCount="25"
+                            minRowCount="25"
                         />
                     </t:rowMode>
                     <!-- <t:extension>
@@ -161,19 +190,35 @@
                         </OverflowToolbar>
                     </t:extension> -->
                     <t:columns>
+                      <t:Column
+                            id="lwgroup"
+                            filterProperty="workflowInstanceId"
+                            sortProperty="workflowInstanceId"
+                        >
+                            <Label text="Workflow Instance" />
+                            <t:template>
+                                <Link
+                                    text="{tableModel>workflowInstanceId}"
+                                    wrapping="false"
+                                    press="onLinkPress"
+                                    tooltip="{tableModel>workflowInstanceId})"
+                                />
+                            </t:template>
+                        </t:Column>
                         <t:Column
                             id="id"
                             filterProperty="id"
                             sortProperty="id"
                             visible="true"
                         >
-                            <Label text="ID" />
+                            <Label text="Task Id" />
                             <t:template>
-                                <Link text="{tableModel>id}" press="onLinkPress"/>
+                                <Text text="{tableModel>id}" />
                             </t:template>
                         </t:Column>
                         <t:Column
                             id="cat"
+                            sortProperty="createdAt"
                         >
                             <Label text="Created At" />
                             <t:template>
@@ -205,20 +250,7 @@
                                 />
                             </t:template>
                         </t:Column>
-                        <t:Column
-                            id="lwgroup"
-                            filterProperty="workflowInstanceId"
-                            sortProperty="workflowInstanceId"
-                        >
-                            <Label text="Workflow Instance" />
-                            <t:template>
-                                <Text
-                                    text="{tableModel>workflowInstanceId}"
-                                    wrapping="false"
-                                    tooltip="{tableModel>workflowInstanceId})"
-                                />
-                            </t:template>
-                        </t:Column>
+                      
                         <t:Column
                             id="cby"
                         >
@@ -233,13 +265,11 @@
                         </t:Column>
                         <t:Column
                             id="wfdid"
-                            filterProperty="definitionId"
-                            sortProperty="definitionId"
                         >
-                            <Label text="Definition Id" />
+                            <Label text="Workflow Type" />
                             <t:template>
                                 <Text
-                                    text="{tableModel>definitionId}"
+                                    text="{path:'tableModel>definitionId',formatter:'.formatter.wfTypeFormatter'}"
                                     wrapping="false"
                                     tooltip="{tableModel>definitionId}"
                                 />
@@ -247,6 +277,7 @@
                         </t:Column>
                         <t:Column
                             id="ilcat"
+                            sortProperty="lastChangedAt"
                         >
                             <Label text="Last Changed At" />
                             <t:template>

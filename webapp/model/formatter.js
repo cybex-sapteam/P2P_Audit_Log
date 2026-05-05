@@ -10,6 +10,22 @@ sap.ui.define([
         var date=new Date(date);
         return date;
     },
+    wfTypeFormatter:function(defId){
+        if(defId!==undefined){
+        if(defId.indexOf("zgb_approvebudget")!==-1){
+            return "Budget Request";
+        }else if(defId.indexOf("purchasereq")!==-1){
+               return "Purchase Request";
+        }else if(defId.indexOf("cervendinv_wf_v2")!==-1){
+            return "Invoice";
+        }
+        else if(defId.indexOf("cerp2passetstoolworkflow")!==-1){
+            return "Purchase Tooling";
+        }else{
+            return defId;
+        }
+    }
+    },
         convertLDateTimeFormat:function(dateString){
                        
             if(dateString){
