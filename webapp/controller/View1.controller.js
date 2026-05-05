@@ -116,12 +116,26 @@ sap.ui.define([
             return sFormattedDate;
         },
         onLinkPress: function (oEvent) {
-            var iD = oEvent.getSource().getBindingContext("tableModel").getObject().id;
-            sap.m.URLHelper.redirect("https://cbx-dev-enviornment-623550vb.eu10.build.cloud.sap/monitoring/workflow-instances/" + iD + "?~type=process");
+            var iD = oEvent.getSource().getBindingContext("tableModel").getObject().workflowInstanceId;
+            let sHost = window.location.host;
+            if (sHost.includes("-qas-")) {
+                var url = "https://cybex-cloud-digital-qas-env.eu10.build.cloud.sap/monitoring/workflow-instances/";
+            }
+            else if (sHost.includes("-prd-")) {
+                url = "https://cybex-cloud-digital-prd-env.launchpad.cfapps.eu10.hana.ondemand.com/site?siteId=d56ddf61-819a-4476-8724-ae5474aa5378#Shell-home%22";
+            }
+            else {
+                url = "https://cbx-dev-enviornment-623550vb.eu10.build.cloud.sap/monitoring/workflow-instances/";
+            }
+            var url= url+ iD + "?~status=ERRONEOUS,RUNNING,SUSPENDED&~type=process";
+            window.open(url, "_blank");
         },
         _loadData: function (filterQuery) {
             var that = this;
-            var Url = "/workflow/rest/v1/task-instances?$orderby=createdAt desc";
+            var appId = this.getOwnerComponent().getManifestEntry("/sap.app/id");
+            var appPath = appId.replaceAll(".", "/");
+            var appModulePath = jQuery.sap.getModulePath(appPath);
+            var Url = appModulePath + "/workflow/rest/v1/task-instances?$orderby=createdAt desc";
             if (filterQuery) {
                 Url = Url + filterQuery;
             }
